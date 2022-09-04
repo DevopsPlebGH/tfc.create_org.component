@@ -21,7 +21,7 @@ jobs:
         include:
           - environment: 'vmware'
     steps:
-      - id: request
+      - id: myRequest
         uses: fjogeleit/http-request-action@v1
         with:
           url: "${{ env.BASE_URI }}/organizations"
@@ -30,32 +30,8 @@ jobs:
           bearerToken: ${{ secrets.TF_API_TOKEN }}
       - name: Show Response
         run: |
-          echo ${{ fromJson(steps.request.outputs.response) }}
-      - id: pwsh
-        run: |
-          function terraform_cloud(){
-            $header=@{
-              Authorization = "Bearer ${{ secrets.TF_API_TOKEN }}"
-              content_type = 'application/vnd.api+json'
-            }
-            $uri = "${{ env.BASE_URI }}organizations"
-            $new = "${{ matrix.environment }}"
-            $response = Invoke-RestMethod -Uri "$uri" -Method Get -Headers $header
-            $array = @()
-            foreach ($id in $response.data.id){
-              $array += $id
-            }
-
-            if (-Not ($array -contains $new)){
-              Write-Host $false
-            } else {
-              Write-Host $true
-            }
-          }
-
-          terraform_cloud
-
-        shell: pwsh
+          echo ${{ steps.myRequest.outputs.response }}
+          echo ${{ fromJson(steps.myRequest.outputs.response) }}
 
 
 
