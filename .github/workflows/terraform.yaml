@@ -24,7 +24,7 @@ jobs:
       - id: myRequest
         uses: fjogeleit/http-request-action@v1
         with:
-          url: "${{ env.BASE_URI }}/organizations"
+          url: "${{ env.BASE_URI }}/organizations/?/q[name]=${{ matrix.environment }}"
           method: GET
           customHeaders: '${{ env.HEADER }}'
           bearerToken: ${{ secrets.TF_API_TOKEN }}
