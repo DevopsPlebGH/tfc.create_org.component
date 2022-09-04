@@ -43,10 +43,10 @@ jobs:
           }
 
           terraform_cloud
-          
+
         shell: pwsh
       - id: output
-        run: echo ${{ steps.request.outputs }}
+        run: echo ${{ steps.request.outputs.stdout }}
 
 
 
