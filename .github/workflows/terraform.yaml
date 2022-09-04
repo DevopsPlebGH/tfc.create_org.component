@@ -26,8 +26,7 @@ jobs:
     steps:
       - id: request
         run: |
-        echo '::set-output  name=CREATE_ORG::$(
-            $header=@{
+          $header=@{
             Authorization = "Bearer ${{ secrets.TF_API_TOKEN }}"
             content_type = 'application/vnd.api+json'
           }
@@ -40,14 +39,17 @@ jobs:
           }
 
           if (-Not ($array -contains $new)){
+            echo "create_org=true" >> $env.GITHUB_ENV
             return $false
           } else {
+            echo "create_org=false" >> $env.GITHUB_ENV
             return $true
-          })'
-      shell: pwsh
+          }
+
+        shell: pwsh
       - name: Check outputs
         run: |
-          echo '${{ steps.request.outputs.CREATE_ORG }}'
+          echo '${{ env.create_org }}'
 
 
 
