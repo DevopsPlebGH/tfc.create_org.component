@@ -6,12 +6,6 @@ on:
       - main
       - dev
       - feature/**
-
-env:
-  BASE_URI: 'https://app.terraform.io/api/v2/'
-  HEADER: '{"Content-Type": "application/vnd.api+json"}'
-
-
 jobs:
   checks:
     name: Check if Terraform Cloud Organization Already exists
@@ -39,15 +33,14 @@ jobs:
           }
 
           if (-Not ($array -contains $new)){
-            echo "create_org=true" >> $env.GITHUB_ENV
+            echo "create_org=true" >> $env:GITHUB_ENV
             return $false
           } else {
-            echo "create_org=false" >> $env.GITHUB_ENV
+            echo "create_org=false" >> $env:GITHUB_ENV
             return $true
           }
-
-        shell: pwsh
-      - name: Check outputs
+      shell: pwsh
+      - id: output
         run: |
           echo '${{ env.create_org }}'
 
