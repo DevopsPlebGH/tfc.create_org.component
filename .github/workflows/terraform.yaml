@@ -41,9 +41,7 @@ jobs:
           }
         shell: pwsh
       - id: output
-        run: |
-          echo ${{ steps.request.outputs.stdout }}
-        shell: pwsh
+        run: echo ${{ steps.request.output }}
 
 
 
