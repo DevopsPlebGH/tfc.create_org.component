@@ -43,8 +43,8 @@ jobs:
           }
 
           $return_value=terraform_cloud
-          Write-Output $return_value >> $env:GITHUB_ENV
-          echo '::set-output name=return_value::$return_value'
+          Write-Output $return_value | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo $env:GITHUB_ENV
         shell: pwsh
       - id: output
         run: echo ${{ env.return_value }}
