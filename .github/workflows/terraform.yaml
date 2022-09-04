@@ -30,8 +30,8 @@ jobs:
           bearerToken: ${{ secrets.TF_API_TOKEN }}
       - name: Show Response
         run: |
-          echo ${{ steps.myRequest.outputs.response }} | jq .
-          echo ${{ fromJson(steps.myRequest.outputs.response) }}
+          echo "response: ${{ steps.myRequest.outputs.response }}"
+          echo "fromJSON: ${{ fromJson(steps.myRequest.outputs.response) }}"
 
 
 
