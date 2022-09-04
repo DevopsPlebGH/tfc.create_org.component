@@ -22,24 +22,28 @@ jobs:
     steps:
       - id: request
         run: |
-          [console]::InputEncoding = [console]::OutputEncoding = New-Object System.Text.UTF8Encoding
-          $header=@{
-            Authorization = "Bearer ${{ secrets.TF_API_TOKEN }}"
-            content_type = 'application/vnd.api+json'
-          }
-          $uri = "${{ env.BASE_URI }}organizations"
-          $new = "${{ matrix.environment }}"
-          $response = Invoke-RestMethod -Uri "$uri" -Method Get -Headers $header
-          $array = @()
-          foreach ($id in $response.data.id){
-            $array += $id
+          function terraform_cloud(){
+            $header=@{
+              Authorization = "Bearer ${{ secrets.TF_API_TOKEN }}"
+              content_type = 'application/vnd.api+json'
+            }
+            $uri = "${{ env.BASE_URI }}organizations"
+            $new = "${{ matrix.environment }}"
+            $response = Invoke-RestMethod -Uri "$uri" -Method Get -Headers $header
+            $array = @()
+            foreach ($id in $response.data.id){
+              $array += $id
+            }
+
+            if (-Not ($array -contains $new)){
+              return "false"
+            } else {
+              return "true"
+            }
           }
 
-          if (-Not ($array -contains $new)){
-            return "false"
-          } else {
-            return "true"
-          }
+          $return_value=terraform_cloud
+
         shell: pwsh
       - id: output
         run: echo ${{ steps.request.outputs.stdout }}
