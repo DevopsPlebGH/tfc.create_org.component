@@ -31,9 +31,7 @@ jobs:
           bearerToken: ${{ secrets.TF_API_TOKEN }}
       - id: response
         run: |
-          $output = '${{ toJSON(steps.request.outputs.response) }}' | ConvertFrom-JSON
-          Write-Host $output
-        shell: pwsh
+          echo '${{ fromJSON(steps.request.outputs.response).[data].id }}'
 
 
 
