@@ -28,7 +28,7 @@ jobs:
             Authorization = "Bearer ${{ secrets.TF_API_TOKEN }}"
             content_type = 'application/vnd.api+json'
           }
-          $uri = ${{ env.BASE_URI }}+"/organizations"
+          $uri = ${{ env.BASE_URI }}"organizations"
 
           $response = Invoke-RestMethod -Uri "$uri" -Method Get -Headers $header
 
