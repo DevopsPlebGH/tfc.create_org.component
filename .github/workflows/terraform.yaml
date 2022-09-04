@@ -6,10 +6,12 @@ on:
       - main
       - dev
       - feature/**
+env:
+  BASE_URI: 'https://app.terraform.io/api/v2/'
 jobs:
   checks:
     name: Check if Terraform Cloud Organization Already exists
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     outputs:
       response: ${{ steps.request.outputs.stdout }}
     strategy:
