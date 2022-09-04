@@ -46,10 +46,10 @@ jobs:
 
         shell: pwsh
       - id: false
-        if: ${{ steps.request.outputs }} == "False"
+        if: ${{ steps.request.outputs.stdout }} == false
         run: echo "False"
       - id: true
-        if: ${{ steps.request.outputs }} == "True"
+        if: ${{ steps.request.outputs.stdout }} == true
         run: echo "True"
 
 
