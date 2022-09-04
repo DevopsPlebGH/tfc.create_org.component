@@ -30,8 +30,7 @@ jobs:
           bearerToken: ${{ secrets.TF_API_TOKEN }}
       - name: Show Response
         run: |
-          echo ${{ steps.request.outputs.response }} >> response.json
-          cat response.json | jq .
+          echo ${{ fromJson(steps.request.outputs.response).body }}
       - id: pwsh
         run: |
           function terraform_cloud(){
