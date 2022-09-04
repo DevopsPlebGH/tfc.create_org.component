@@ -20,7 +20,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - environment: 'vsphere'
+          - environment: 'vmware'
     steps:
       - id: request
         run: |
@@ -29,13 +29,19 @@ jobs:
             content_type = 'application/vnd.api+json'
           }
           $uri = "${{ env.BASE_URI }}organizations"
-
+          $new = "${{ matrix.environment }}"
           $response = Invoke-RestMethod -Uri "$uri" -Method Get -Headers $header
+          $array = @()
+          foreach ($id in $response.data.id){
+            $array += $id
+          }
 
-          try {
-            return $response.data
-          } catch {
+          if (-Not ($array -contains $new)){
+            Write-Host -ForegroundColor Yellow "Organization does not exist!"
             return $false
+          } else {
+            Write-Host -ForegroundColor Green "Organization already exists!"
+            return $true
           }
         shell: pwsh
 
