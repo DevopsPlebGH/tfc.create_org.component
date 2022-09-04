@@ -23,15 +23,21 @@ jobs:
           - environment: 'vsphere'
     steps:
       - id: request
-        uses: fjogeleit/http-request-action@v1
-        with:
-          url: "${{ env.BASE_URI }}/organizations"
-          method: GET
-          customHeaders: '${{ env.HEADER }}'
-          bearerToken: ${{ secrets.TF_API_TOKEN }}
-      - id: response
         run: |
-          echo ${{ fromJSON(steps.request.outputs.response).id }}
+          $header=@{
+            Authorization = "Bearer ${{ secrets.TF_API_TOKEN }}"
+            content_type = 'application/vnd.api+json'
+          }
+          $uri = ${{ env.BASE_URI }}+"/organizations"
+
+          $response = Invoke-RestMethod -Uri "$uri" -Method Get -Headers $header
+
+          try {
+            return $response
+          } catch {
+            return $false
+          }
+        shell: pwsh
 
 
 
