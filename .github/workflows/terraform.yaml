@@ -39,7 +39,7 @@ jobs:
             echo "create_org=false" >> $env:GITHUB_ENV
             return $true
           }
-      shell: pwsh
+        shell: pwsh
       - id: output
         run: |
           echo '${{ env.create_org }}'
