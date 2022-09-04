@@ -22,6 +22,7 @@ jobs:
     steps:
       - id: request
         run: |
+          [console]::InputEncoding = [console]::OutputEncoding = New-Object System.Text.UTF8Encoding
           $header=@{
             Authorization = "Bearer ${{ secrets.TF_API_TOKEN }}"
             content_type = 'application/vnd.api+json'
