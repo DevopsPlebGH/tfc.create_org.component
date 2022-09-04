@@ -33,7 +33,10 @@ jobs:
           $response = Invoke-RestMethod -Uri "$uri" -Method Get -Headers $header
 
           try {
-            return $response.id
+            $data = @{
+              id = $response.id
+            }
+            return $data
           } catch {
             return $false
           }
