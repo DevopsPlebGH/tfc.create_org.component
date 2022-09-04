@@ -31,8 +31,8 @@ jobs:
           bearerToken: ${{ secrets.TF_API_TOKEN }}
       - id: response
         run: |
-          echo ${{ steps.request.outputs.response }}
-          echo ${{ fromJSON(steps.request.outputs.response).data }}
+          echo ${{ steps.request.outputs.response }} | ConvertFrom-JSON
+        shell: pwsh
 
 
 
