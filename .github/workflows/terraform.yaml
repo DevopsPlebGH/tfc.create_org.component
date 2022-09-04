@@ -48,6 +48,9 @@ jobs:
       - id: false
         if: ${{ steps.request.outputs }} == "False"
         run: echo "False"
+      - id: true
+        if: ${{ steps.request.outputs }} == "True"
+        run: echo "True"
 
 
 
