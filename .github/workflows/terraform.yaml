@@ -26,7 +26,8 @@ jobs:
     steps:
       - id: request
         run: |
-          $header=@{
+        echo '::set-output  name=CREATE_ORG::$(
+            $header=@{
             Authorization = "Bearer ${{ secrets.TF_API_TOKEN }}"
             content_type = 'application/vnd.api+json'
           }
@@ -39,16 +40,14 @@ jobs:
           }
 
           if (-Not ($array -contains $new)){
-            Write-Host -ForegroundColor Yellow "Organization does not exist!"
             return $false
           } else {
-            Write-Host -ForegroundColor Green "Organization already exists!"
             return $true
-          }
-        shell: pwsh
+          })'
+      shell: pwsh
       - name: Check outputs
         run: |
-          echo '${{ steps.request.stdout }}'
+          echo '${{ steps.request.outputs.CREATE_ORG }}'
 
 
 
