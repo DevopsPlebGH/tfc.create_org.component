@@ -9,12 +9,15 @@ on:
 jobs:
   checks:
     name: Check if Terraform Cloud Organization Already exists
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     outputs:
       response: ${{ steps.request.outputs.stdout }}
     strategy:
       fail-fast: false
       matrix:
+        os:
+          - ubuntu-latest
+          - self-hosted
         include:
           - environment: 'vmware'
     steps:
