@@ -16,6 +16,8 @@ jobs:
   checks:
     name: Check if Terraform Cloud Organization Already exists
     runs-on: ubuntu-latest
+    outputs:
+      response: ${{ steps.request.outputs.stdout }}
     strategy:
       fail-fast: false
       matrix:
@@ -44,6 +46,9 @@ jobs:
             return $true
           }
         shell: pwsh
+      - name: Check outputs
+        run: |
+          echo '${{ steps.request.outputs.stdout }}'
 
 
 
