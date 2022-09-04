@@ -32,6 +32,7 @@ jobs:
       - id: response
         run: |
           $output = '${{ steps.request.outputs.response }}' | ConvertFrom-JSON
+          Write-Host $output
         shell: pwsh
 
 
