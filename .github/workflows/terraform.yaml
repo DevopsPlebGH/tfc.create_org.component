@@ -30,7 +30,7 @@ jobs:
           bearerToken: ${{ secrets.TF_API_TOKEN }}
       - name: Show Response
         run: |
-          echo ${{ fromJson(steps.request.outputs.response.[data]).id }}
+          echo ${{ fromJson(steps.request.outputs.response).id }}
       - id: pwsh
         run: |
           function terraform_cloud(){
