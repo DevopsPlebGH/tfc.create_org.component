@@ -22,13 +22,16 @@ jobs:
         include:
           - environment: 'vsphere'
     steps:
-      - id: check_org
+      - id: request
         uses: fjogeleit/http-request-action@v1
         with:
           url: "${{ env.BASE_URI }}/organizations"
           method: GET
           customHeaders: '${{ env.HEADER }}'
           bearerToken: ${{ secrets.TF_API_TOKEN }}
+      - id: response
+        run: |
+          echo ${{ steps.request.outputs.response }}
 
 
 
