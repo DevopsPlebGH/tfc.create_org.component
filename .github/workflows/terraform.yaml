@@ -9,7 +9,7 @@ on:
 
 env:
   BASE_URI: 'https://app.terraform.io/api/v2/'
-  HEADER: '{"Content-Type: application/vnd.api+json"}'
+  HEADER: '{"Content-Type": "application/vnd.api+json"}'
 
 
 jobs:
