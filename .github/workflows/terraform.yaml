@@ -8,6 +8,7 @@ on:
       - feature/**
 env:
   BASE_URI: 'https://app.terraform.io/api/v2/'
+  HEADER: '{"Content-Type": "application/vnd.api+json"}'
 jobs:
   checks:
     name: Check if Terraform Cloud Organization Already exists
@@ -20,6 +21,13 @@ jobs:
         include:
           - environment: 'vmware'
     steps:
+      - id: check_org
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: "${{ env.BASE_URI }}/organizations"
+          method: GET
+          customHeaders: '${{ env.HEADER }}'
+          bearerToken: ${{ secrets.TF_API_TOKEN }}
       - id: request
         run: |
           function terraform_cloud(){
@@ -45,12 +53,7 @@ jobs:
           terraform_cloud
 
         shell: pwsh
-      - id: false
-        if: ${{ steps.request.outputs.stdout }} == false
-        run: echo "False"
-      - id: true
-        if: ${{ steps.request.outputs.stdout }} == true
-        run: echo "True"
+
 
 
 
