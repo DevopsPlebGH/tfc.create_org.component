@@ -36,9 +36,9 @@ jobs:
           }
 
           if (-Not ($array -contains $new)){
-            return $false
+            return "false"
           } else {
-            return $true
+            return "true"
           }
         shell: pwsh
       - id: output
