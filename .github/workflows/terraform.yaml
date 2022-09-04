@@ -45,8 +45,9 @@ jobs:
           terraform_cloud
 
         shell: pwsh
-      - id: output
-        run: echo ${{ steps.request.outputs.stdout }}
+      - id: false
+        if: ${{ steps.request.outputs }} == "False"
+        run: echo "False"
 
 
 
