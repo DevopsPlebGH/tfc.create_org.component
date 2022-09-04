@@ -33,16 +33,14 @@ jobs:
           }
 
           if (-Not ($array -contains $new)){
-            echo "create_org=true" >> $env:GITHUB_ENV
             return $false
           } else {
-            echo "create_org=false" >> $env:GITHUB_ENV
             return $true
           }
         shell: pwsh
       - id: output
         run: |
-          echo '${{ env.create_org }}'
+          echo ${{ steps.request.outputs.stdout }}
 
 
 
