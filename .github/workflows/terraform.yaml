@@ -43,7 +43,8 @@ jobs:
           }
 
           $return_value=terraform_cloud
-
+          Write-Output $return_value
+          echo '::set-output name=return_value::$return_value'
         shell: pwsh
       - id: output
         run: echo ${{ steps.request.outputs.stdout }}
