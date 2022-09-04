@@ -21,14 +21,19 @@ jobs:
         include:
           - environment: 'vmware'
     steps:
-      - id: check_org
+      - id: request
         uses: fjogeleit/http-request-action@v1
         with:
           url: "${{ env.BASE_URI }}/organizations"
           method: GET
           customHeaders: '${{ env.HEADER }}'
           bearerToken: ${{ secrets.TF_API_TOKEN }}
-      - id: request
+      - name: Show Response
+        run: |
+          echo ${{ steps.request.outputs.response }}
+          echo ${{ steps.request.outputs.headers }}
+          echo ${{ fromJson(steps.request.outputs.response).data.id }}
+      - id: pwsh
         run: |
           function terraform_cloud(){
             $header=@{
