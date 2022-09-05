@@ -43,10 +43,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - environment: 'github-devopsplebgh'
-          - environment: 'vmware-thebrynards'
-          - environment: 'azure-production'
-          - environment: 'aws-693051501776'
+          - environment: ${{ needs.check.outputs.create }}
     needs: check
     if: ${{ needs.check.outputs.create == '' }}
     steps:
@@ -113,6 +110,9 @@ jobs:
           name: ${{ matrix.environment }}-terraformstatefile
           path: ${{ env.artifactPath }}
           if-no-files-found: error
+  migrate_state:
+    name: Migrate Terraform State from Artifacts to Terraform Cloud
+    runs-on: ubuntu-latest
 
 
 
