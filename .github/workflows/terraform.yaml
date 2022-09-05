@@ -14,13 +14,12 @@ jobs:
     name: Check if Terraform Cloud Organization Already exists
     runs-on: ubuntu-latest
     outputs:
-      response: fromJSON: ${{ fromJson(steps.myRequest.outputs.response).data['0'].id }}
+      response: ${{ fromJson(steps.myRequest.outputs.response).data['0'].id }}
     strategy:
       fail-fast: false
       matrix:
         include:
           - environment: 'vmware'
-          - environment: 'TheBrynards'
     steps:
       - id: myRequest
         uses: fjogeleit/http-request-action@v1
@@ -31,9 +30,19 @@ jobs:
           bearerToken: ${{ secrets.TF_API_TOKEN }}
       - name: Show Response
         run: |
-          echo "response: ${{ steps.myRequest.outputs.response }}"
-          echo "fromJSON: ${{ fromJson(steps.myRequest.outputs.response).data['0'].id }}"
+          echo "${{ fromJson(steps.myRequest.outputs.response).data['0'].id }}"
   create_org:
     name: Create Terraform Cloud Organization
     runs-on: ubuntu-latest
+    needs: check
+    if: needs.check.outputs.response == 'null'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - environment: 'vmware'
+    steps:
+      - id: create
+        run: |
+          echo "Would create TF org here."
 
