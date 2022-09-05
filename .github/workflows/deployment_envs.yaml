@@ -7,7 +7,7 @@ on:
 
 env:
   BASE_URI: 'https://api.github.com/repos/'
-  HEADER: "Content-Type": "application/vnd.github+json"
+  HEADER: '"Content-Type": "application/vnd.github+json"'
 jobs:
   list_envs:
     name: List Deployment Environments
