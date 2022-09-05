@@ -35,7 +35,7 @@ jobs:
           echo '::set-output create=${{ fromJson(steps.myRequest.outputs.response).data['0'].id }}'
       - name: Create Org if it doesn't exist
         id: tfCreate
-        if: fromJson(steps.myRequest.outputs.response).data['0'].id  == "{}"
+        if: fromJson(steps.myRequest.outputs.response).data['0'].id  == '{}'
         run: echo "Creating Org"
 
 
