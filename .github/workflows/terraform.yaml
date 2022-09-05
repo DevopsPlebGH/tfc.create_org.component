@@ -5,7 +5,7 @@ on:
     branches:
       - main
       - dev
-      - feature/**
+#      - feature/**
 env:
   BASE_URI: 'https://app.terraform.io/api/v2/'
   HEADER: '{"Content-Type": "application/vnd.api+json"}'
