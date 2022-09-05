@@ -17,19 +17,17 @@ jobs:
     steps:
       - id: set-matrix
         run: |
-          function get_deployments(){
-            $token="${{ github.token }}"
-            $header=@{
-              content_type = 'application/vnd.github+json'
-              Authorization = "Bearer $token"
-            }
-            $base_uri="${{ env.BASE_URI }}"
-            $uri="$base_uri"+"${{ github.repository }}/environments"
-
-            $response = Invoke-RestMethod -Uri $uri -Headers $header -Method GET
-
-            return $response
+          $token="${{ github.token }}"
+          $header=@{
+            content_type = 'application/vnd.github+json'
+            Authorization = "Bearer $token"
           }
+          $base_uri="${{ env.BASE_URI }}"
+          $uri="$base_uri"+"${{ github.repository }}/environments"
+
+          $response = Invoke-RestMethod -Uri $uri -Headers $header -Method GET
+
+          Write-Output $response
 
           $matrix=get_deployments
           Write-Host $matrix
