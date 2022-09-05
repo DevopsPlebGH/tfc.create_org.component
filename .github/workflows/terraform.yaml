@@ -19,7 +19,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - environment: 'vmware'
+          - environment: 'github-devopsplebgh'
+          - environment: 'vmware-thebrynards'
+          - environment: 'azure-production'
+          - environment: 'aws-693051501776'
     steps:
       - id: myRequest
         uses: fjogeleit/http-request-action@v1
@@ -86,6 +89,26 @@ jobs:
           TF_VAR_admin_email: ${{ secrets.ADMIN_EMAIL }}
           TF_VAR_oauth_token: ${{ secrets.OAUTH_TOKEN }}
           TF_VAR_name: ${{ matrix.environment }}
+      - name: Terraform apply
+        id: apply
+        if: steps.plan.outcome == 'success'
+        continue-on-error: true
+        run: |
+          terraform plan -input=false -out=tfplan
+          terraform apply -input=false tfplan
+
+          statefile=./terraform.tfstate
+          if [ -f "$statefile" ]; then
+            openssl enc -in ./terraform.tfstate -aes-256-cbc -pbkdf2 -pass pass:"${{ secrets.ENCRYPTION_KEY }}" -out ./terraform.tfstate.enc
+            echo "artifactPath=$(pwd)/terraform.tfstate.enc" >> $GITHUB_ENV
+          fi
+          echo $GITHUB_ENV
+      - name: Statefile artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.environment }}-terraformstatefile
+          path: ${{ env.artifactPath }}
+          if-no-files-found: error
 
 
 
