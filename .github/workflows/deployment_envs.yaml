@@ -41,7 +41,7 @@ jobs:
     steps:
       - name: Check matrix definition
         run: |
-          matrix='${{ fromJSONneeds.matrix.outputs.matrix }}'
+          matrix='${{ fromJSON(needs.matrix.outputs.matrix) }}'
           echo $matrix
   check_tfc_orgs:
     name: Check if Terraform Cloud Organizations already exist
