@@ -41,7 +41,7 @@ jobs:
     name: Create Terraform Cloud Organization if it doesn't exist
     runs-on: ubuntu-latest
     needs: check
-    if: needs.check.outputs.create == null
+    if: fromJSON(needs.check.outputs.create) == null
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
