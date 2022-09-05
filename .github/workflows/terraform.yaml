@@ -20,6 +20,7 @@ jobs:
       matrix:
         include:
           - environment: 'vmware'
+          - environment: 'TheBrynards'
     steps:
       - id: myRequest
         uses: fjogeleit/http-request-action@v1
