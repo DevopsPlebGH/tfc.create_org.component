@@ -15,6 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       create: ${{ steps.response.outputs.create }}
+      defined: ${{ steps.isDefined.outputs.defined }}
     strategy:
       fail-fast: false
       matrix:
@@ -37,6 +38,11 @@ jobs:
         run: |
           echo "${{ fromJson(steps.myRequest.outputs.response).data['0'].id }}"
           echo '::set-output name=create::${{ fromJson(steps.myRequest.outputs.response).data['0'].id }}'
+      - id: isDefined
+        if: ${{ env.exists != '' }}
+        run: echo "::set-output name=defined::true"
+        env:
+          exists: ${{ fromJson(steps.myRequest.outputs.response).data['0'].id }}
   create_org:
     name: Create Terraform Cloud Organization if it doesn't exist
     runs-on: ubuntu-latest
@@ -46,7 +52,7 @@ jobs:
         include:
           - environment: ${{ needs.check.outputs.create }}
     needs: check
-    if: ${{ needs.check.outputs.create == '' }}
+    if: ${{ needs.check.outputs.defined != true }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
