@@ -95,7 +95,7 @@ jobs:
         continue-on-error: true
         run: |
           terraform plan -input=false -out=tfplan
-          terraform apply -input=false tfplan
+#          terraform apply -input=false tfplan
 
           statefile=./terraform.tfstate
           if [ -f "$statefile" ]; then
@@ -103,6 +103,10 @@ jobs:
             echo "artifactPath=$(pwd)/terraform.tfstate.enc" >> $GITHUB_ENV
           fi
           echo $GITHUB_ENV
+        env:
+          TF_VAR_admin_email: ${{ secrets.ADMIN_EMAIL }}
+          TF_VAR_oauth_token: ${{ secrets.OAUTH_TOKEN }}
+          TF_VAR_name: ${{ matrix.environment }}
       - name: Statefile artifact
         uses: actions/upload-artifact@v2
         with:
