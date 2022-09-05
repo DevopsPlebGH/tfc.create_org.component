@@ -39,8 +39,8 @@ jobs:
           echo "${{ fromJson(steps.myRequest.outputs.response).data['0'].id }}"
           echo '::set-output name=create::${{ fromJson(steps.myRequest.outputs.response).data['0'].id }}'
       - id: isDefined
-        if: ${{ env.exists != '' }}
-        run: echo "::set-output name=defined::true"
+        if: ${{ env.exists == null }}
+        run: echo "::set-output name=defined::false"
         env:
           exists: ${{ fromJson(steps.myRequest.outputs.response).data['0'].id }}
   create_org:
