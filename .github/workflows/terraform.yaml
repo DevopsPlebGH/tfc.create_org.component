@@ -20,7 +20,6 @@ jobs:
       matrix:
         include:
           - environment: 'vmware'
-          - environment: 'TheBrynards'
     steps:
       - id: myRequest
         uses: fjogeleit/http-request-action@v1
@@ -41,10 +40,10 @@ jobs:
     name: Create Terraform Cloud Organization if it doesn't exist
     runs-on: ubuntu-latest
     needs: check
-    if: fromJSON(needs.check.outputs.create) == null
+  #  if: fromJSON(needs.check.outputs.create) == null
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - id: output
+        run: echo ${{ needs.check.outputs.create }}
 
 
 
