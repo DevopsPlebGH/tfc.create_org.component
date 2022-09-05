@@ -27,6 +27,8 @@ jobs:
             $uri="$global:base_uri${{ github.repository }}/environments"
             $header=$global:header
             $response = Invoke-RestMethod -Uri $uri -Headers $header -Method GET
+
+            return $uri
           }
 
           $matrix=get_deployments
