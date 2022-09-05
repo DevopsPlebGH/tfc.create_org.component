@@ -20,7 +20,7 @@ jobs:
           response=$(curl \
             -H "${{ env.HEADER }}" \
             -H "Authorization: Bearer ${{ github.token }}" \
-            ${{ env.BASE_URI }}${{ github.repository }}/environments | jq -c '.environments[] | .name' | tr -d '"')
+            ${{ env.BASE_URI }}${{ github.repository }}/environments | jq -c '.environments[] | .name')
 
           matrix=($response)
           echo $matrix
