@@ -20,6 +20,7 @@ jobs:
       matrix:
         include:
           - environment: 'vmware'
+          - environment: 'TheBrynards'
     steps:
       - id: myRequest
         uses: fjogeleit/http-request-action@v1
@@ -43,15 +44,6 @@ jobs:
     needs: check
     if: ${{ needs.check.outputs.create }} == ''
     steps:
-      - id: output
-        run: |
-          CREATE=${{ needs.check.outputs.create }}
-          if [ -z "$CREATE" ]
-          then
-            echo "My variable is null"
-          else
-            echo "My variable is not null"
-          fi
       - name: Checkout code
         uses: actions/checkout@v2
 
