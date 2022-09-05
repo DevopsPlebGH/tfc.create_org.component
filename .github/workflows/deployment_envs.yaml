@@ -20,14 +20,9 @@ jobs:
           response=$(curl \
             -H "${{ env.HEADER }}" \
             -H "Authorization: Bearer ${{ github.token }}" \
-            ${{ env.BASE_URI }}${{ github.repository }}/environments | jq -c '.environments[] | .name' )
+            ${{ env.BASE_URI }}${{ github.repository }}/environments | jq -c '.environments[] | .name' | tr -d '"')
 
-          matrix=()
-
-          for i in $(echo $response)
-          do
-            matrix +=($i)
-          done
+          matrix=($response)
           echo $matrix
           echo "::set-output name=matrix::$matrix"
   check-matrix:
