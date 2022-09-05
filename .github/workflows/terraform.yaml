@@ -10,11 +10,11 @@ env:
   BASE_URI: 'https://app.terraform.io/api/v2/'
   HEADER: '{"Content-Type": "application/vnd.api+json"}'
 jobs:
-  checks:
+  check:
     name: Check if Terraform Cloud Organization Already exists
     runs-on: ubuntu-latest
     outputs:
-      response: ${{ steps.request.outputs.stdout }}
+      response: fromJSON: ${{ fromJson(steps.myRequest.outputs.response).data['0'].id }}
     strategy:
       fail-fast: false
       matrix:
@@ -33,3 +33,7 @@ jobs:
         run: |
           echo "response: ${{ steps.myRequest.outputs.response }}"
           echo "fromJSON: ${{ fromJson(steps.myRequest.outputs.response).data['0'].id }}"
+  create_org:
+    name: Create Terraform Cloud Organization
+    runs-on: ubuntu-latest
+
