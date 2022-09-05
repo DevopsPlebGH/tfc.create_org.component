@@ -32,4 +32,4 @@ jobs:
       - name: Show Response
         run: |
           echo "response: ${{ steps.myRequest.outputs.response }}"
-          echo "fromJSON: ${{ fromJson(steps.myRequest.outputs.response)[0].id }}"
+          echo "fromJSON: ${{ fromJson(steps.myRequest.outputs.response).data[].id }}"
