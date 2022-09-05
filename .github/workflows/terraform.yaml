@@ -6,29 +6,116 @@ on:
       - main
       - dev
       - feature/**
-
 env:
   BASE_URI: 'https://app.terraform.io/api/v2/'
   HEADER: '{"Content-Type": "application/vnd.api+json"}'
-
-
 jobs:
-  checks:
+  check:
     name: Check if Terraform Cloud Organization Already exists
+    runs-on: ubuntu-latest
+    outputs:
+      create: ${{ steps.response.outputs.create }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - environment: 'github-devopsplebgh'
+          - environment: 'vmware-thebrynards'
+          - environment: 'azure-production'
+          - environment: 'aws-693051501776'
+    steps:
+      - id: myRequest
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: "${{ env.BASE_URI }}/organizations?q[name]=${{ matrix.environment }}"
+          method: GET
+          customHeaders: '${{ env.HEADER }}'
+          bearerToken: ${{ secrets.TF_API_TOKEN }}
+      - name: Show
+        id: response
+        run: |
+          echo "${{ fromJson(steps.myRequest.outputs.response).data['0'].id }}"
+          echo '::set-output name=create::${{ fromJson(steps.myRequest.outputs.response).data['0'].id }}'
+  create_org:
+    name: Create Terraform Cloud Organization if it doesn't exist
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         include:
-          - environment: 'vsphere'
+          - environment: 'github-devopsplebgh'
+          - environment: 'vmware-thebrynards'
+          - environment: 'azure-production'
+          - environment: 'aws-693051501776'
+    needs: check
+    if: ${{ needs.check.outputs.create }} == 'null'
     steps:
-      - id: check_org
-        uses: fjogeleit/http-request-action@v1
+      - name: Checkout code
+        uses: actions/checkout@v2
         with:
-          url: "${{ env.BASE_URI }}/organizations"
-          method: GET
-          customHeaders: '${{ env.HEADER }}'
-          bearerToken: ${{ secrets.TF_API_TOKEN }}
+          ref: ${{ github.ref }}
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      - name: Check if statefile exists
+        id: stateExists
+        uses: dawidd6/action-download-artifact@v2
+        continue-on-error: true
+        with:
+          github_token: ${{ github.token }}
+          name: ${{ matrix.environment }}-terraformstatefile
+          path: ./terraform
+      - name: Decrypt Statefile
+        if: steps.stateExists.outcome == 'success'
+        run: |
+          if [ -f ./terraform.tfstate.enc ]; then
+            echo "Encrypted statefile found! Decrypting statefile..."
+            openssl enc -d -in ./terraform.tfstate.enc -aes-256-cbc -pbkdf2 -pass pass:"${{ secrets.STATE_FILE_ENCRYPTION_KEY }}" -out ./terraform.tfstate
+          else
+            echo "Encrypted statefile not found!"
+          fi
+      - name: Terraform Init
+        id: init
+        continue-on-error: true
+        run: |
+          terraform init -input=false
+      - name: Terraform plan
+        id: plan
+        continue-on-error: true
+        run: |
+          terraform plan -input=false -out=tfplan
+        env:
+          TF_VAR_admin_email: ${{ secrets.ADMIN_EMAIL }}
+          TF_VAR_oauth_token: ${{ secrets.OAUTH_TOKEN }}
+          TF_VAR_name: ${{ matrix.environment }}
+      - name: Terraform apply
+        id: apply
+        if: steps.plan.outcome == 'success'
+        continue-on-error: true
+        run: |
+          terraform plan -input=false -out=tfplan
+          terraform apply -input=false tfplan
+
+          statefile=./terraform.tfstate
+          if [ -f "$statefile" ]; then
+            openssl enc -in ./terraform.tfstate -aes-256-cbc -pbkdf2 -pass pass:"${{ secrets.STATE_FILE_ENCRYPTION_KEY }}" -out ./terraform.tfstate.enc
+            echo "artifactPath=$(pwd)/terraform.tfstate.enc" >> $GITHUB_ENV
+          fi
+          echo $GITHUB_ENV
+        env:
+          TF_VAR_admin_email: ${{ secrets.ADMIN_EMAIL }}
+          TF_VAR_oauth_token: ${{ secrets.OAUTH_TOKEN }}
+          TF_VAR_name: ${{ matrix.environment }}
+      - name: Statefile artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.environment }}-terraformstatefile
+          path: ${{ env.artifactPath }}
+          if-no-files-found: error
+
+
+
 
 
 
