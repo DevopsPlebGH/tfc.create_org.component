@@ -72,15 +72,5 @@ jobs:
         run: |
           echo "${{ fromJSON(steps.request.outputs.response).data['0'].id }}"
           echo '::set-output name=create::${{ fromJson(steps.request.outputs.response).data['0'].id }}'
-      - id: isDefined
-        if: ${{ fromJson(steps.request.outputs.response).data['0'].id != '' }}
-        run: echo "::set-output name=defined::true"
-      - id: isNotDefined
-        if: ${{ fromJson(steps.request.outputs.response).data['0'].id == '' }}
-        run: echo "::set-output name=notdefined::true"
-      - id: orgMatrix
-        if: steps.isNotDefined.outcome == 'success'
-        run: |
-          NEWORG=${{ matrix.environment }}
-          echo "::set-output name=orgs::${NEWORG}"
+
 
