@@ -32,7 +32,8 @@ jobs:
             return $data
           }
 
-          $matrix=get_environments
+          $environments=get_environments
+          Write-Output $environments
           echo "::set-output name=matrix::$matrix"
         shell: pwsh
   check_matrix:
@@ -43,34 +44,5 @@ jobs:
         run: |
           matrix='${{ needs.matrix.outputs.matrix }}'
           echo $matrix
-  check_tfc_orgs:
-    name: Check if Terraform Cloud Organizations already exist
-    runs-on: ubuntu-latest
-    needs: matrix
-    outputs:
-      create: ${{ steps.response.outputs.create }}
-      defined: ${{ steps.isDefined.outputs.defined }}
-      notdefined: ${{ steps.isNotDefined.outputs.notdefined }}
-      orgs: ${{ steps.orgMatrix.outputs.orgs }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - environment: ${{ fromJSON(needs.matrix.outputs.matrix) }}
-    steps:
-      - id: request
-        uses: fjogeleit/http-request-action@v1
-        with:
-          url: "${{ env.BASE_URI }}/organizations?q[name]=${{ matrix.environment }}"
-          method: GET
-          customHeaders: '${{ env.HEADER }}'
-          bearerToken: ${{ secrets.TF_API_TOKEN }}
-        env:
-          BASE_URI: 'https://app.terraform.io/api/v2/'
-          HEADER: '{"Content-Type": "application/vnd.api+json"}'
-      - id: response
-        run: |
-          echo "${{ fromJSON(steps.request.outputs.response).data['0'].id }}"
-          echo '::set-output name=create::${{ fromJson(steps.request.outputs.response).data['0'].id }}'
 
 
