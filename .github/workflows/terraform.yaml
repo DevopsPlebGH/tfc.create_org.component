@@ -44,7 +44,14 @@ jobs:
     #if: ${{ needs.check.outputs.create }}
     steps:
       - id: output
-        run: echo ${{ needs.check.outputs.create }}
+        run: |
+          CREATE=${{ needs.check.outputs.create }}
+          if [ -z "$CREATE" ]
+          then
+            echo "My variable is null"
+          else
+            echo "My variable is not null"
+          fi
       - name: Checkout code
         uses: actions/checkout@v2
 
