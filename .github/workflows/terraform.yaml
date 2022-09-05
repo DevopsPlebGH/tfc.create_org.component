@@ -95,11 +95,11 @@ jobs:
         continue-on-error: true
         run: |
           terraform plan -input=false -out=tfplan
-#          terraform apply -input=false tfplan
+          terraform apply -input=false tfplan
 
           statefile=./terraform.tfstate
           if [ -f "$statefile" ]; then
-            openssl enc -in ./terraform.tfstate -aes-256-cbc -pbkdf2 -pass pass:"${{ secrets.ENCRYPTION_KEY }}" -out ./terraform.tfstate.enc
+            openssl enc -in ./terraform.tfstate -aes-256-cbc -pbkdf2 -pass pass:"${{ secrets.STATE_FILE_ENCRYPTION_KEY }}" -out ./terraform.tfstate.enc
             echo "artifactPath=$(pwd)/terraform.tfstate.enc" >> $GITHUB_ENV
           fi
           echo $GITHUB_ENV
