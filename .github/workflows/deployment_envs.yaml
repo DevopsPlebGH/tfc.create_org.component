@@ -27,5 +27,5 @@ jobs:
 
           $response = Invoke-RestMethod -Uri $uri -Headers $header -Method GET
 
-          Write-Output $response
+          Write-Output $response.environments.name
         shell: pwsh
