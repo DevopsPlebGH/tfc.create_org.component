@@ -23,6 +23,7 @@ jobs:
           - environment: 'vmware-thebrynards'
           - environment: 'azure-production'
           - environment: 'aws-693051501776'
+          - environment: 'test-org-contoso-ltd'
     steps:
       - id: myRequest
         uses: fjogeleit/http-request-action@v1
