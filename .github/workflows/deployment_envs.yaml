@@ -23,7 +23,11 @@ jobs:
             ${{ env.BASE_URI }}${{ github.repository }}/environments | jq -c '.environments[] | .name' )
 
           echo $response
-          
+
+          matrix=$response
+
+          echo $matrix
+
           environments=$(echo $matrix | jq -c '.environments[] | .name')
           echo "::set-output name=matrix::$environments"
   check-matrix:
