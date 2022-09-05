@@ -56,7 +56,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - environment: ${{ needs.matrix.outputs.matrix }}
+          - environment: ${{ fromJSON(needs.matrix.outputs.matrix) }}
     steps:
       - id: request
         uses: fjogeleit/http-request-action@v1
