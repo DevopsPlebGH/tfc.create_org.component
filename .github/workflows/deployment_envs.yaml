@@ -27,13 +27,15 @@ jobs:
             $uri="$base_uri"+"${{ github.repository }}/environments"
 
             $response = Invoke-RestMethod -Uri $uri -Headers $header -Method GET
-            $data = $response.environments | ConvertTo-JSON
+            $data = @{
+              environment = $response.environments.name
+            }
 
             return $data
           }
 
           $environments=get_environments
-          Write-Output $environments
+          $matrix=$environments | ConvertTo-JSON
           echo "::set-output name=matrix::$matrix"
         shell: pwsh
   check_matrix:
