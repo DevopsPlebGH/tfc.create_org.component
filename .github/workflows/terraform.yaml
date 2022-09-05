@@ -32,7 +32,7 @@ jobs:
       - name: Show Response
         run: |
           echo "response: ${{ steps.myRequest.outputs.response }}"
-          echo "fromJSON: ${{ fromJson(steps.myRequest.outputs.response).data }}"
+          echo "fromJSON: ${{ fromJson(steps.myRequest.outputs.response).data.data }}"
 
 
 
