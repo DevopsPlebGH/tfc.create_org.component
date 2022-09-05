@@ -17,6 +17,7 @@ jobs:
       create: ${{ steps.response.outputs.create }}
       defined: ${{ steps.isDefined.outputs.defined }}
       notdefined: ${{ steps.isNotDefined.outputs.notdefined }}
+      orgs: ${{ steps.orgMatrix.outputs.orgs }}
     strategy:
       fail-fast: false
       matrix:
@@ -45,6 +46,11 @@ jobs:
       - id: isNotDefined
         if: ${{ fromJson(steps.myRequest.outputs.response).data['0'].id == '' }}
         run: echo "::set-output name=notdefined::true"
+      - id: orgMatrix
+        if: ${{ steps.isNotDefined.outputs == true }}
+        run: |
+          NEWORG=${{ matrix.environment }}
+          echo "::set-output name=orgs::${NEWORG}"
 
   create_org:
     name: Create Terraform Cloud Organization if it doesn't exist
@@ -53,7 +59,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - environment: ${{ needs.check.outputs.create }}
+          - environment: ${{ needs.check.outputs.orgs }}
     needs: check
     if: ${{ needs.check.outputs.notdefined == 'true' }}
     steps:
