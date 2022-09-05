@@ -110,9 +110,6 @@ jobs:
           name: ${{ matrix.environment }}-terraformstatefile
           path: ${{ env.artifactPath }}
           if-no-files-found: error
-  migrate_state:
-    name: Migrate Terraform State from Artifacts to Terraform Cloud
-    runs-on: ubuntu-latest
 
 
 
