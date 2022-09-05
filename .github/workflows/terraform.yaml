@@ -33,18 +33,9 @@ jobs:
         run: |
           echo "${{ fromJson(steps.myRequest.outputs.response).data['0'].id }}"
           echo '::set-output create=${{ fromJson(steps.myRequest.outputs.response).data['0'].id }}'
-  create_org:
-    name: Create Terraform Cloud Organization
-    runs-on: ubuntu-latest
-    needs: check
-    if: toJSON(needs.check.outputs.create) == "{}"
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - environment: 'vmware'
-    steps:
-      - id: create
-        run: |
-          echo "Would create TF org here."
+      - name: Create Org if it doesn't exist
+        id: tfCreate
+        if: fromJson(steps.myRequest.outputs.response).data['0'].id  == "{}"
+        run: echo "Creating Org"
+
 
