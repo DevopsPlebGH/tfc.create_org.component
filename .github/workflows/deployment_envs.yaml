@@ -46,6 +46,7 @@ jobs:
   check_tfc_orgs:
     name: Check if Terraform Cloud Organizations already exist
     runs-on: ubuntu-latest
+    needs: matrix
     outputs:
       create: ${{ steps.response.outputs.create }}
       defined: ${{ steps.isDefined.outputs.defined }}
@@ -64,6 +65,9 @@ jobs:
           method: GET
           customHeaders: '${{ env.HEADER }}'
           bearerToken: ${{ secrets.TF_API_TOKEN }}
+        env:
+          BASE_URI: 'https://app.terraform.io/api/v2/'
+          HEADER: '{"Content-Type": "application/vnd.api+json"}'
       - id: response
         run: |
           echo "${{ fromJSON(steps.request.outputs.response).data['0'].id }}"
