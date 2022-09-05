@@ -14,7 +14,7 @@ jobs:
     name: Check if Terraform Cloud Organization Already exists
     runs-on: ubuntu-latest
     outputs:
-      create: ${{ fromJson(steps.myRequest.outputs.response).data['0'].id }}
+      create: ${{ steps.response.outputs.create }}
     strategy:
       fail-fast: false
       matrix:
@@ -28,10 +28,11 @@ jobs:
           method: GET
           customHeaders: '${{ env.HEADER }}'
           bearerToken: ${{ secrets.TF_API_TOKEN }}
-      - name: Show Response
+      - name: Show
+        id: response
         run: |
           echo "${{ fromJson(steps.myRequest.outputs.response).data['0'].id }}"
-          echo '::set-output create=${{ fromJson(steps.myRequest.outputs.response).data['0'].id }}'
+          echo '::set-output name=create::${{ fromJson(steps.myRequest.outputs.response).data['0'].id }}'
       - name: Create Org if it doesn't exist
         id: tfCreate
         if: fromJson(steps.myRequest.outputs.response).data['0'].id  == null
