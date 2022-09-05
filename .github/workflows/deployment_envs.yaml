@@ -14,12 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: request
-        uses: fjogeleit/http-request-action@v1
-        with:
-          url: "${{ env.BASE_URI }}${{ github.repository }}/environments"
-          method: GET
-          customHeaders: '${{ env.HEADER }}'
-          bearerToken: ${{ secrets.OAUTH_TOKEN }}
-      - id: response
         run: |
-          echo "${{ fromJson(steps.request.outputs.response).environments['0'].name{'*'} }}"
+          curl \
+            -H "${{ env.HEADER }}" \
+            -H "Authorization: Bearer ${{ github.token }}" \
+            ${{ env.BASE_URI }}${{ github.repository }}/environments
