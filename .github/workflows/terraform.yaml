@@ -16,6 +16,7 @@ jobs:
     outputs:
       create: ${{ steps.response.outputs.create }}
       defined: ${{ steps.isDefined.outputs.defined }}
+      notdefined: ${{ steps.isNotDefined.outputs.notdefined }}
     strategy:
       fail-fast: false
       matrix:
@@ -43,7 +44,7 @@ jobs:
         run: echo "::set-output name=defined::true"
       - id: isNotDefined
         if: ${{ fromJson(steps.myRequest.outputs.response).data['0'].id == '' }}
-        run: echo "::set-output name=defined::false"
+        run: echo "::set-output name=notdefined::true"
 
   create_org:
     name: Create Terraform Cloud Organization if it doesn't exist
@@ -54,7 +55,7 @@ jobs:
         include:
           - environment: ${{ needs.check.outputs.create }}
     needs: check
-    if: ${{ needs.check.outputs.defined == 'false' }}
+    if: ${{ needs.check.outputs.notdefined == 'true' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
