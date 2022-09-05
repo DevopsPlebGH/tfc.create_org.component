@@ -82,6 +82,7 @@ jobs:
         env:
           TF_VAR_admin_email: ${{ secrets.ADMIN_EMAIL }}
           TF_VAR_oauth_token: ${{ secrets.OAUTH_TOKEN }}
+          TF_VAR_name: ${{ matrix.environment }}
 
 
 
