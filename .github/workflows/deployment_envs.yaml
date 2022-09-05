@@ -22,9 +22,8 @@ jobs:
             -H "Authorization: Bearer ${{ github.token }}" \
             ${{ env.BASE_URI }}${{ github.repository }}/environments)
 
-          matrix=$(echo $RESPONSE)
+          matrix=$(echo $RESPONSE | jq -c '.environments[] | .name')
           echo $matrix
-          echo $matrix | jq -c '.environments[] | .name'
           echo "::set-output name=matrix::$matrix"
   check-matrix:
     runs-on: ubuntu-latest
