@@ -1,0 +1,25 @@
+name: Get Github Deployment Environments
+
+on:
+  push:
+    branches:
+      - feature/get_deployment_envs
+
+env:
+  BASE_URI: 'https://api.github.com/repos/'
+  HEADER: '{"Content-Type": "application/vnd.github+json"}'
+jobs:
+  list_envs:
+    name: List Deployment Environments
+    runs-on: ubuntu-latest
+    steps:
+      - id: request
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: "${{ env.BASE_URI }}/${{ github.repository_owner }}/${{ github.repository }}/environments"
+          method: GET
+          customHeaders: '${{ env.HEADER }}'
+          bearerToken: ${{ secrets.OAUTH_TOKEN }}
+      - id: response
+        run: |
+          echo "${{ steps.request.outputs.response }}"
