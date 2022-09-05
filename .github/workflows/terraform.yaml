@@ -20,7 +20,6 @@ jobs:
       matrix:
         include:
           - environment: 'vmware'
-          - environment: 'TheBrynards'
     steps:
       - id: myRequest
         uses: fjogeleit/http-request-action@v1
@@ -42,9 +41,8 @@ jobs:
       matrix:
         include:
           - environment: 'vmware'
-          - environment: 'TheBrynards'
     needs: check
-    if: ${{ needs.check.outputs.create }} == ''
+    if: ${{ needs.check.outputs.create }} == 'null'
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
