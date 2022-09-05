@@ -47,7 +47,7 @@ jobs:
         if: ${{ fromJson(steps.myRequest.outputs.response).data['0'].id == '' }}
         run: echo "::set-output name=notdefined::true"
       - id: orgMatrix
-        if: ${{ steps.isNotDefined.outputs == true }}
+        if: steps.isNotDefined.outcome == 'success'
         run: |
           NEWORG=${{ matrix.environment }}
           echo "::set-output name=orgs::${NEWORG}"
@@ -63,6 +63,9 @@ jobs:
     needs: check
     if: ${{ needs.check.outputs.notdefined == 'true' }}
     steps:
+      - name: Create New Org
+        run: |
+          echo ${{ matrix.environment }}
       - name: Checkout code
         uses: actions/checkout@v2
         with:
