@@ -17,13 +17,13 @@ jobs:
     steps:
       - id: set-matrix
         run: |
-          export RESPONSE=$(curl \
+          response=$(curl \
             -H "${{ env.HEADER }}" \
             -H "Authorization: Bearer ${{ github.token }}" \
-            ${{ env.BASE_URI }}${{ github.repository }}/environments)
+            ${{ env.BASE_URI }}${{ github.repository }}/environments | jq -c '.environments[] | .name' )
 
-          matrix=$(echo $RESPONSE)
-          echo $matrix | jq -c '.environments[] | .name'
+          echo $response
+          
           environments=$(echo $matrix | jq -c '.environments[] | .name')
           echo "::set-output name=matrix::$environments"
   check-matrix:
