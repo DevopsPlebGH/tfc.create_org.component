@@ -32,18 +32,4 @@ jobs:
       - name: Show Response
         run: |
           echo "response: ${{ steps.myRequest.outputs.response }}"
-          echo "fromJSON: ${{ fromJson(steps.myRequest.outputs.response['data']).id }}"
-      - id: httpRequest
-        run: |
-          curl \
-            --header "Authorization: Bearer ${{ secrets.TF_API_TOKEN }}" \
-            --header "Content-Type: application/vnd.api+json" \
-            --request GET \
-            https://app.terraform.io/api/v2/organizations?q[name]=${{ matrix.environment }} -o data.json
-      - id: parseJson
-        run: |
-          echo '::set-output name=id::'$(jq -r '.someField' data.json)
-
-
-
-
+          echo "fromJSON: ${{ fromJson(steps.myRequest.outputs.response)['data'] }}"
