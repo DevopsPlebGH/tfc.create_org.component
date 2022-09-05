@@ -52,7 +52,7 @@ jobs:
         include:
           - environment: ${{ needs.check.outputs.create }}
     needs: check
-    if: ${{ needs.check.outputs.defined != true }}
+    if: ${{ needs.check.outputs.defined != 'true' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
