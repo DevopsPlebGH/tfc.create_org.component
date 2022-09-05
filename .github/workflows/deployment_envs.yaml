@@ -35,4 +35,3 @@ jobs:
           matrix='${{ needs.matrix.outputs.matrix }}'
           echo $matrix
           echo $matrix | jq .
-          echo $matrix | json2yaml
