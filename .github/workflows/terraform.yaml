@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - environment: 'TheBrynards'
+          - environment: 'vmware'
     steps:
       - id: myRequest
         uses: fjogeleit/http-request-action@v1
@@ -41,7 +41,7 @@ jobs:
     name: Create Terraform Cloud Organization if it doesn't exist
     runs-on: ubuntu-latest
     needs: check
-    #if: ${{ needs.check.outputs.create }}
+    if: ${{ needs.check.outputs.create }} == ''
     steps:
       - id: output
         run: |
