@@ -67,6 +67,12 @@ jobs:
           else
             echo "Encrypted statefile not found!"
           fi
+      - name: Terraform Init
+        id: init
+        continue-on-error: true
+        run: |
+          terraform init -input=false 
+
 
 
 
