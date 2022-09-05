@@ -15,7 +15,9 @@ jobs:
     steps:
       - id: request
         run: |
-          curl \
+          RESPONSE = $(curl \
             -H "${{ env.HEADER }}" \
             -H "Authorization: Bearer ${{ github.token }}" \
-            ${{ env.BASE_URI }}${{ github.repository }}/environments
+            ${{ env.BASE_URI }}${{ github.repository }}/environments)
+
+          echo $RESPONSE
