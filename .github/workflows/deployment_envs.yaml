@@ -24,15 +24,12 @@ jobs:
 
           matrix=$(echo $RESPONSE)
           echo $matrix | jq -c '.environments[] | .name'
-          echo "::set-output name=matrix::$matrix"
+          environments=$(echo $matrix | jq -c '.environments[] | .name')
+          echo "::set-output name=matrix::$environments"
   check-matrix:
     runs-on: ubuntu-latest
     needs: matrix
     steps:
-      - name: Install json2yaml
-        run: |
-          sudo npm install -g json2yaml
-
       - name: Check matrix definition
         run: |
           matrix='${{ needs.matrix.outputs.matrix }}'
