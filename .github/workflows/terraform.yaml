@@ -37,5 +37,14 @@ jobs:
         id: tfCreate
         if: fromJson(steps.myRequest.outputs.response).data['0'].id  == null
         run: echo "Creating Org"
+  create_org:
+    name: Create Terraform Cloud Organization if it doesn't exist
+    runs-on: ubuntu-latest
+    needs: check
+    if: needs.check.outputs.create == null
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
 
 
