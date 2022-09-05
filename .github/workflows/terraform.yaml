@@ -40,7 +40,6 @@ jobs:
     if: needs.check.outputs.create == null
     strategy:
       fail-fast: false
-      matrix: ${{fromJson(needs.check.outputs.create)}}
         include:
           - environment: 'vmware'
     steps:
