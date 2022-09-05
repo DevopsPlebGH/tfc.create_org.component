@@ -41,6 +41,10 @@ jobs:
       - id: isDefined
         if: ${{ fromJson(steps.myRequest.outputs.response).data['0'].id != '' }}
         run: echo "::set-output name=defined::true"
+      - id: isNotDefined
+        if: ${{ fromJson(steps.myRequest.outputs.response).data['0'].id == '' }}
+        run: echo "::set-output name=defined::false"
+
   create_org:
     name: Create Terraform Cloud Organization if it doesn't exist
     runs-on: ubuntu-latest
@@ -50,7 +54,7 @@ jobs:
         include:
           - environment: ${{ needs.check.outputs.create }}
     needs: check
-    if: ${{ needs.check.outputs.defined != 'true' }}
+    if: ${{ needs.check.outputs.defined == 'false' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
