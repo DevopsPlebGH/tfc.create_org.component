@@ -27,7 +27,7 @@ jobs:
             $uri="$base_uri"+"${{ github.repository }}/environments"
 
             $response = Invoke-RestMethod -Uri $uri -Headers $header -Method GET
-            $data = $response.environments.name
+            $data = $response.environments.name | ConvertTo-JSON
 
             return $data
           }
@@ -41,7 +41,7 @@ jobs:
     steps:
       - name: Check matrix definition
         run: |
-          matrix='${{ needs.matrix.outputs.matrix }}'
+          matrix='${{ fromJSONneeds.matrix.outputs.matrix }}'
           echo $matrix
   check_tfc_orgs:
     name: Check if Terraform Cloud Organizations already exist
