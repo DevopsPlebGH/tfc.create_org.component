@@ -39,10 +39,8 @@ jobs:
           echo "${{ fromJson(steps.myRequest.outputs.response).data['0'].id }}"
           echo '::set-output name=create::${{ fromJson(steps.myRequest.outputs.response).data['0'].id }}'
       - id: isDefined
-        if: ${{ env.exists == null }}
-        run: echo "::set-output name=defined::false"
-        env:
-          exists: ${{ fromJson(steps.myRequest.outputs.response).data['0'].id }}
+        if: ${{ fromJson(steps.myRequest.outputs.response).data['0'].id != '' }}
+        run: echo "::set-output name=defined::true"
   create_org:
     name: Create Terraform Cloud Organization if it doesn't exist
     runs-on: ubuntu-latest
