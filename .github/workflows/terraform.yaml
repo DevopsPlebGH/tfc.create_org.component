@@ -32,14 +32,15 @@ jobs:
       - name: Show Response
         run: |
           echo "${{ fromJson(steps.myRequest.outputs.response).data['0'].id }}"
-          echo ::set-output create=${{ fromJson(steps.myRequest.outputs.response).data['0'].id }}
+          echo '::set-output create=${{ fromJson(steps.myRequest.outputs.response).data['0'].id }}'
   create_org:
     name: Create Terraform Cloud Organization
     runs-on: ubuntu-latest
     needs: check
-    if: needs.check.outputs.create == 'null'
+    if: needs.check.outputs.response == ""
     strategy:
       fail-fast: false
+      matrix:
         include:
           - environment: 'vmware'
     steps:
