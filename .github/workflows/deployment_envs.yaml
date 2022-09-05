@@ -16,7 +16,7 @@ jobs:
       - id: request
         uses: fjogeleit/http-request-action@v1
         with:
-          url: "${{ env.BASE_URI }}/${{ github.repository_owner }}/${{ github.repository }}/environments"
+          url: "${{ env.BASE_URI }}/${{ github.repository }}/environments"
           method: GET
           customHeaders: '${{ env.HEADER }}'
           bearerToken: ${{ secrets.OAUTH_TOKEN }}
