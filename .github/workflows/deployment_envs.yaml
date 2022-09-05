@@ -20,4 +20,5 @@ jobs:
             -H "Authorization: Bearer ${{ github.token }}" \
             ${{ env.BASE_URI }}${{ github.repository }}/environments)
 
-          echo $RESPONSE | jq -c '.environments[] | .name'
+          matrix=$(( echo $RESPONSE | jq -c '.environments[] | .name' ))
+          echo $matrix
