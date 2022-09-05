@@ -15,7 +15,7 @@ jobs:
     steps:
       - id: request
         run: |
-          RESPONSE = $(curl \
+          export RESPONSE=$(curl \
             -H "${{ env.HEADER }}" \
             -H "Authorization: Bearer ${{ github.token }}" \
             ${{ env.BASE_URI }}${{ github.repository }}/environments)
