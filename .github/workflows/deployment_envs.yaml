@@ -33,5 +33,13 @@ jobs:
           }
 
           $matrix=get_environments
-          Write-Output $matrix
+          echo "::set-output name=matrix::$matrix"
         shell: pwsh
+  check_matrix:
+    runs-on: ubuntu-latest
+    needs: matrix
+    steps:
+      - name: Check matrix definition
+        run: |
+          matrix='${{ needs.matrix.outputs.matrix }}'
+          echo $matrix
