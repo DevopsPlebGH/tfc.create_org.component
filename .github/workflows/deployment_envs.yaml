@@ -27,7 +27,7 @@ jobs:
             $uri="$base_uri"+"${{ github.repository }}/environments"
 
             $response = Invoke-RestMethod -Uri $uri -Headers $header -Method GET
-            $data = $response.environments.name | ConvertTo-JSON
+            $data = $response.environments | ConvertTo-JSON
 
             return $data
           }
