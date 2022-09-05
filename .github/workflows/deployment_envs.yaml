@@ -17,15 +17,20 @@ jobs:
     steps:
       - id: set-matrix
         run: |
-          $token="${{ github.token }}"
-          $header=@{
-            content_type = 'application/vnd.github+json'
-            Authorization = "Bearer $token"
+          function get_environments(){
+            $token="${{ github.token }}"
+            $header=@{
+              content_type = 'application/vnd.github+json'
+              Authorization = "Bearer $token"
+            }
+            $base_uri="${{ env.BASE_URI }}"
+            $uri="$base_uri"+"${{ github.repository }}/environments"
+
+            $response = Invoke-RestMethod -Uri $uri -Headers $header -Method GET
+            $data = $response.environments.name
+
+            return $data
           }
-          $base_uri="${{ env.BASE_URI }}"
-          $uri="$base_uri"+"${{ github.repository }}/environments"
 
-          $response = Invoke-RestMethod -Uri $uri -Headers $header -Method GET
-
-          Write-Output $response.environments.name
+          Write-Output get_environments
         shell: pwsh
