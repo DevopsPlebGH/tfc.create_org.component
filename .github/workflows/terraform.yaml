@@ -37,7 +37,7 @@ jobs:
     name: Create Terraform Cloud Organization
     runs-on: ubuntu-latest
     needs: check
-    if: needs.check.outputs.response == ""
+    if: needs.check.outputs.create == null
     strategy:
       fail-fast: false
       matrix:
