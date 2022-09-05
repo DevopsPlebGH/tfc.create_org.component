@@ -71,7 +71,12 @@ jobs:
         id: init
         continue-on-error: true
         run: |
-          terraform init -input=false 
+          terraform init -input=false
+      - name: Terraform plan
+        id: plan
+        continue-on-error: true
+        run: |
+          terraform plan -input=false -out=tfplan
 
 
 
