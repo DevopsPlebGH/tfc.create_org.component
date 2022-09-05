@@ -65,7 +65,7 @@ jobs:
         run: |
           if [ -f ./terraform.tfstate.enc ]; then
             echo "Encrypted statefile found! Decrypting statefile..."
-            openssl enc -d -in ./terraform.tfstate.enc -aes-256-cbc -pbkdf2 -pass pass:"${{ secrets.ENCRYPTION_KEY }}" -out ./terraform.tfstate
+            openssl enc -d -in ./terraform.tfstate.enc -aes-256-cbc -pbkdf2 -pass pass:"${{ secrets.STATE_FILE_ENCRYPTION_KEY }}" -out ./terraform.tfstate
           else
             echo "Encrypted statefile not found!"
           fi
@@ -79,6 +79,9 @@ jobs:
         continue-on-error: true
         run: |
           terraform plan -input=false -out=tfplan
+        env:
+          TF_VAR_admin_email: ${{ secrets.ADMIN_EMAIL }}
+          TF_VAR_oauth_token: ${{ secrets.OAUTH_TOKEN }}
 
 
 
