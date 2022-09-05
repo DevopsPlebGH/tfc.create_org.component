@@ -22,4 +22,4 @@ jobs:
           bearerToken: ${{ secrets.OAUTH_TOKEN }}
       - id: response
         run: |
-          echo "${{ steps.request.outputs.response }}"
+          echo "${{ fromJson(steps.request.outputs.response).environments[''].name }}"
