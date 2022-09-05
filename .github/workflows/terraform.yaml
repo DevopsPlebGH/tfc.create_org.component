@@ -48,7 +48,7 @@ jobs:
           - environment: 'azure-production'
           - environment: 'aws-693051501776'
     needs: check
-    if: ${{ needs.check.outputs.create }} == null
+    if: ${{ needs.check.outputs.create == '' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
