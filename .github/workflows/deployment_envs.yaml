@@ -32,5 +32,6 @@ jobs:
             return $data
           }
 
-          Write-Output get_environments
+          $matrix=get_environments
+          Write-Output $matrix
         shell: pwsh
