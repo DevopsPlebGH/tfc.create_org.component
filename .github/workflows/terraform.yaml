@@ -113,6 +113,14 @@ jobs:
   migrate_state:
     name: Migrate Terraform State from Artifacts to Terraform Cloud
     runs-on: ubuntu-latest
+    strategy:
+      fail-fase: false
+      matrix:
+        include:
+          - environment: 'github-devopsplebgh'
+          - environment: 'vmware-thebrynards'
+          - environment: 'azure-production'
+          - environment: 'aws-693051501776'
 
 
 
