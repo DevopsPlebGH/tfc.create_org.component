@@ -44,7 +44,7 @@ jobs:
     steps:
       - name: Check matrix definition
         run: |
-          matrix='${{ needs.matrix.outputs.matrix }}'
+          matrix='${{ fromJson(needs.matrix.outputs.matrix) }}'
           echo $matrix
 
 
